@@ -1,24 +1,23 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useCrypto } from "../context/CryptoContext";
 
 const Navbar = () => {
-  return (
-    <nav className="fixed top-0 left-0 w-full bg-slate-900 text-white shadow-md z-50">
-      <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
-        <Link to="/" className="text-xl font-bold">
-          CryptoRadar
-        </Link>
+  const { currency, setCurrency } = useCrypto();
 
-        <div className="space-x-6">
-          <NavLink to="/" className="hover:text-green-400">
-            Home
-          </NavLink>
-          <NavLink to="/analysis" className="hover:text-green-400">
-            Analysis
-          </NavLink>
-          <NavLink to="/settings" className="hover:text-green-400">
-            Settings
-          </NavLink>
-        </div>
+  return (
+    <nav className="p-5 flex justify-between items-center shadow-lg bg-indigo-900 text-white sticky top-0 z-50">
+      <h1 className="text-xl font-bold tracking-widest">CRYPTO-PULSE</h1>
+      <div className="flex gap-6 items-center">
+        <Link to="/" className="hover:text-cyan-400 font-medium">Market</Link>
+        <Link to="/analysis" className="hover:text-cyan-400 font-medium">Analysis</Link>
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="bg-white text-black rounded px-2 py-1"
+        >
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
       </div>
     </nav>
   );
