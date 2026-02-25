@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCrypto } from '../context/CryptoContext';
 import { useFetchCrypto } from '../hooks/useFetchCrypto';
+import { MarketChart } from '../components/MarketChart';
 
 const Home = () => {
   const { coins } = useCrypto();
