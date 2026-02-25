@@ -4,7 +4,7 @@ const CryptoContext = createContext();
 
 export const CryptoProvider = ({ children }) => {
   const [coins, setCoins] = useState([]);
-  const [currency, setCurrency] = useState('usd');
+  const [currency, setCurrency] = useState('USD');
 
   return (
     <CryptoContext.Provider value={{ coins, setCoins, currency, setCurrency }}>
