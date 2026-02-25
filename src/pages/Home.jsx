@@ -1,22 +1,33 @@
-import { useState, useRef, useEffect } from "react";
+// src/pages/Home.jsx
+
+import { useRef, useEffect } from "react";
 import { useFetchCrypto } from "../hooks/useFetchCrypto";
 import { useCrypto } from "../context/CryptoContext";
 import MarketChart from "../components/MarketChart";
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const Home = () => {
+  // Reference for search input (autofocus)
   const searchRef = useRef(null);
-  const [search, setSearch] = useState("");
+
+  // Context for coins and currency
   const { coins, currency } = useCrypto();
+
+  // Custom hook to fetch coin data with loading/error
   const { loading, error } = useFetchCrypto();
 
-  // Focus on search input when page loads
+  // Controlled form with localStorage persistence
+  const [searchQuery, setSearchQuery] = useLocalStorage('searchQuery', '');
+
+  // Focus the search input on page load
   useEffect(() => {
     searchRef.current?.focus();
   }, []);
 
-  // Filter coins based on search
+  // Filter coins based on searchQuery (case-insensitive)
   const filteredCoins = coins.filter((coin) =>
-    coin.name.toLowerCase().includes(search.toLowerCase())
+    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Helper to format price with currency symbol
@@ -40,8 +51,9 @@ const Home = () => {
       <div className="mb-4">
         <input
           ref={searchRef}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search assets..."
           className="
             bg-gray-800 text-white placeholder-gray-400 
@@ -56,7 +68,7 @@ const Home = () => {
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {/* ================= MARKET CHART ================= */}
-      <MarketChart />
+      <MarketChart coins={filteredCoins} />
 
       {/* ================= COIN CARDS ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
